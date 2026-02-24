@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real Self Orbit — Feedback Survey</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F1117;
+    --surface: #181B25;
+    --surface-hover: #1E2233;
+    --border: #2A2E3D;
+    --accent: #E8A838;
+    --accent-glow: rgba(232, 168, 56, 0.15);
+    --accent-soft: #F5D89A;
+    --text: #E8E6E1;
+    --text-muted: #8B8D97;
+    --text-dim: #5A5C66;
+    --success: #4ADE80;
+    --orbit-1: #E8A838;
+    --orbit-2: #D97706;
+    --orbit-3: #92400E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -40%;
+    left: -20%;
+    width: 80vw;
+    height: 80vw;
+    background: radial-gradient(circle, rgba(232, 168, 56, 0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -30%;
+    right: -15%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(217, 119, 6, 0.03) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    text-align: center;
+    padding: 60px 0 40px;
+  }
+
+  .orbit-graphic {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 36px;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    animation: spin linear infinite;
+  }
+
+  .orbit-ring:nth-child(1) { inset: 0; border-color: var(--orbit-1); opacity: 0.4; animation-duration: 12s; }
+  .orbit-ring:nth-child(2) { inset: 15px; border-color: var(--orbit-2); opacity: 0.5; animation-duration: 8s; animation-direction: reverse; }
+  .orbit-ring:nth-child(3) { inset: 30px; border-color: var(--orbit-3); opacity: 0.6; animation-duration: 5s; }
+
+  .orbit-core {
+    position: absolute;
+    inset: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, var(--accent), var(--orbit-2));
+    box-shadow: 0 0 30px var(--accent-glow), 0 0 60px rgba(232, 168, 56, 0.08);
+  }
+
+  .orbit-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .orbit-ring:nth-child(1) .orbit-dot { top: -3px; left: 50%; }
+  .orbit-ring:nth-child(2) .orbit-dot { bottom: -3px; right: 10px; }
+  .orbit-ring:nth-child(3) .orbit-dot { top: 5px; left: -3px; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ─── Setup Screen ─── */
+  .setup-screen { animation: fadeUp 0.6s ease both; }
+
+  .setup-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    margin-bottom: 24px;
+  }
+
+  .setup-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 10px;
+    color: var(--accent-soft);
+  }
+
+  .setup-card .subtitle {
+    color: var(--text-muted);
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .setup-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .setup-field label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .setup-field input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  .setup-field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .setup-field .helper {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .setup-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, var(--accent), var(--orbit-2));
+    color: var(--bg);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(232, 168, 56, 0.3);
+    margin-top: 8px;
+  }
+
+  .setup-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232, 168, 56, 0.4); }
+
+  .copy-link-section {
+    display: none;
+    background: var(--surface);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .copy-link-section h3 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--success);
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    font-weight: 400;
+  }
+
+  .copy-link-section p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  .link-display {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: var(--accent);
+    word-break: break-all;
+    margin-bottom: 16px;
+    font-family: monospace;
+  }
+
+  .copy-btn {
+    padding: 10px 28px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .copy-btn:hover { background: var(--accent); color: var(--bg); }
+
+  /* ─── Safe Space Card ─── */
+  .safe-space-card {
+    background: linear-gradient(135deg, rgba(232, 168, 56, 0.06), rgba(217, 119, 6, 0.03));
+    border: 1px solid rgba(232, 168, 56, 0.15);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 12px;
+    animation: fadeUp 0.6s ease both;
+    animation-delay: 0.1s;
+  }
+
+  .safe-space-icon { font-size: 2rem; margin-bottom: 14px; }
+
+  .safe-space-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--accent-soft);
+    margin-bottom: 16px;
+  }
+
+  .safe-space-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.75;
+    margin-bottom: 12px;
+  }
+
+  .safe-space-card p:last-child { margin-bottom: 0; }
+  .safe-space-card strong { color: var(--text); font-weight: 500; }
+
+  .owner-name-highlight {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ─── Progress ─── */
+  .progress-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 17, 23, 0.92);
+    backdrop-filter: blur(12px);
+    padding: 16px 0;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .progress-track {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .progress-fill-container {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--orbit-3), var(--accent));
+    border-radius: 4px;
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .progress-label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  /* ─── Respondent Info ─── */
+  .respondent-info {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .respondent-info h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 24px;
+    color: var(--accent-soft);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 500px) { .info-grid { grid-template-columns: 1fr; } }
+
+  .info-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .info-grid input, .info-grid select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  .info-grid input:focus, .info-grid select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .info-grid select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238B8D97' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  /* ─── Question Card ─── */
+  .question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .question-card:hover { border-color: rgba(232, 168, 56, 0.2); }
+  .question-card.answered { border-color: rgba(74, 222, 128, 0.2); }
+
+  .question-number {
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .question-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .question-hint {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    font-weight: 300;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  /* ─── Scale Rating ─── */
+  .scale-labels { display: flex; justify-content: space-between; margin-bottom: 8px; }
+
+  .scale-labels span {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .scale-options { display: flex; gap: 8px; }
+  .scale-options label { flex: 1; cursor: pointer; }
+  .scale-options input { display: none; }
+
+  .scale-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .scale-btn:hover {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .scale-options input:checked + .scale-btn {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(232, 168, 56, 0.25);
+  }
+
+  /* ─── Open-ended ─── */
+  .open-answer {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    line-height: 1.6;
+  }
+
+  .open-answer:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  /* ─── Submit ─── */
+  .submit-section {
+    text-align: center;
+    padding: 40px 0 20px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 48px;
+    background: linear-gradient(135deg, var(--accent), var(--orbit-2));
+    color: var(--bg);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(232, 168, 56, 0.3);
+  }
+
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232, 168, 56, 0.4); }
+  .submit-btn:active { transform: translateY(0); }
+
+  .submit-note {
+    margin-top: 14px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ─── Thank You ─── */
+  .thank-you {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .thank-you .checkmark {
+    width: 72px;
+    height: 72px;
+    background: rgba(74, 222, 128, 0.1);
+    border: 2px solid var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    font-size: 32px;
+  }
+
+  .thank-you h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+
+  .thank-you p {
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 440px;
+    margin: 0 auto 24px;
+  }
+
+  /* ─── Data Panel ─── */
+  .data-panel {
+    display: none;
+    margin-top: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+
+  .data-panel h3 {
+    font-family: 'DM Serif Display', serif;
+    margin-bottom: 20px;
+    color: var(--accent-soft);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  .data-table th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+  }
+
+  .data-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .export-btn {
+    margin-top: 20px;
+    margin-right: 10px;
+    padding: 10px 24px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .export-btn:hover { background: var(--accent); color: var(--bg); }
+
+  /* ─── Scoring Guide ─── */
+  .scoring-guide {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 36px;
+    margin-top: 32px;
+    animation: fadeUp 0.6s ease both;
+    animation-delay: 0.2s;
+  }
+
+  .scoring-guide h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--accent-soft);
+    margin-bottom: 8px;
+  }
+
+  .scoring-guide .guide-intro {
+    color: var(--text-muted);
+    font-weight: 300;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .tier {
+    display: flex;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .tier:last-child { border-bottom: none; }
+
+  .tier-badge {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .tier-badge.t1 { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.25); }
+  .tier-badge.t2 { background: rgba(251, 146, 60, 0.12); border: 1px solid rgba(251, 146, 60, 0.25); }
+  .tier-badge.t3 { background: rgba(250, 204, 21, 0.12); border: 1px solid rgba(250, 204, 21, 0.25); }
+  .tier-badge.t4 { background: rgba(74, 222, 128, 0.12); border: 1px solid rgba(74, 222, 128, 0.25); }
+  .tier-badge.t5 { background: rgba(232, 168, 56, 0.12); border: 1px solid rgba(232, 168, 56, 0.35); }
+
+  .tier-content { flex: 1; }
+
+  .tier-range {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tier-range.t1 { color: #EF4444; }
+  .tier-range.t2 { color: #FB923C; }
+  .tier-range.t3 { color: #FACC15; }
+  .tier-range.t4 { color: #4ADE80; }
+  .tier-range.t5 { color: var(--accent); }
+
+  .tier-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  .tier-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* ─── Scorecard in results ─── */
+  .scorecard {
+    background: linear-gradient(135deg, rgba(232, 168, 56, 0.08), rgba(217, 119, 6, 0.04));
+    border: 1px solid rgba(232, 168, 56, 0.2);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  .scorecard-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .scorecard-label {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 4px 0 12px;
+  }
+
+  .scorecard-tier {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .scorecard-tier.t1 { background: rgba(239, 68, 68, 0.15); color: #EF4444; }
+  .scorecard-tier.t2 { background: rgba(251, 146, 60, 0.15); color: #FB923C; }
+  .scorecard-tier.t3 { background: rgba(250, 204, 21, 0.15); color: #FACC15; }
+  .scorecard-tier.t4 { background: rgba(74, 222, 128, 0.15); color: #4ADE80; }
+  .scorecard-tier.t5 { background: rgba(232, 168, 56, 0.15); color: var(--accent); }
+
+  .scorecard-blurb {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .question-card:nth-child(1) { animation-delay: 0.05s; }
+  .question-card:nth-child(2) { animation-delay: 0.1s; }
+  .question-card:nth-child(3) { animation-delay: 0.15s; }
+  .question-card:nth-child(4) { animation-delay: 0.2s; }
+  .question-card:nth-child(5) { animation-delay: 0.25s; }
+  .question-card:nth-child(6) { animation-delay: 0.3s; }
+  .question-card:nth-child(7) { animation-delay: 0.35s; }
+  .question-card:nth-child(8) { animation-delay: 0.4s; }
+  .question-card:nth-child(9) { animation-delay: 0.45s; }
+  .question-card:nth-child(10) { animation-delay: 0.5s; }
+
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SETUP SCREEN — for the person requesting feedback      -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="container" id="setupScreen">
+  <div class="hero">
+    <div class="orbit-graphic">
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-core"></div>
+    </div>
+    <h1>Real Self <span>Orbit</span> Feedback</h1>
+    <p>A simple way to see yourself through the eyes of people you trust. Set up your personalized survey, then share the link with anyone whose perspective matters to you.</p>
+  </div>
+
+  <div class="setup-screen">
+    <div class="setup-card">
+      <h2>Let's get you set up</h2>
+      <p class="subtitle">Just drop in your first name and email below. When someone fills out your survey, their feedback will land straight in your inbox — nicely formatted and ready to read. No accounts, no logins, no fuss.</p>
+
+      <div class="setup-field">
+        <label for="ownerName">Your First Name</label>
+        <input type="text" id="ownerName" placeholder="e.g. Marcus">
+        <span class="helper">This personalizes the questions — respondents will see things like "When Marcus walks into a room…"</span>
+      </div>
+
+      <div class="setup-field">
+        <label for="ownerPronouns">Your Pronouns</label>
+        <select id="ownerPronouns" style="background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; color: var(--text); font-family: 'Outfit', sans-serif; font-size: 1rem; outline: none; cursor: pointer; appearance: none; background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238B8D97' stroke-width='1.5' fill='none'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;">
+          <option value="she">She / Her / Her</option>
+          <option value="he">He / Him / His</option>
+          <option value="they">They / Them / Their</option>
+        </select>
+        <span class="helper">This ensures the survey questions use the right grammar for you.</span>
+      </div>
+
+      <div class="setup-field">
+        <label for="ownerEmail">Your Email Address</label>
+        <input type="email" id="ownerEmail" placeholder="you@example.com">
+        <span class="helper">Responses get emailed here. Your email is never shown to respondents.</span>
+      </div>
+
+      <div class="setup-field">
+        <label for="ownerKey">Web3Forms Access Key (free)</label>
+        <input type="text" id="ownerKey" placeholder="e.g. a1b2c3d4-e5f6-7890-abcd-ef1234567890">
+        <span class="helper">This makes submissions automatic and anonymous. Get your free key in 30 seconds at <a href="https://web3forms.com" target="_blank" style="color: var(--accent); text-decoration: underline;">web3forms.com</a> — just enter the same email above, verify it, and paste the key here. Free for 250 submissions/month.</span>
+      </div>
+
+      <button class="setup-btn" onclick="generateSurvey()">Generate My Survey →</button>
+    </div>
+
+    <div class="copy-link-section" id="linkSection">
+      <h3>✓ Your survey is ready!</h3>
+      <p>Copy this link and share it with friends, colleagues, or anyone whose honest perspective you value. Each person who fills it out will send their feedback directly to your inbox.</p>
+      <div class="link-display" id="linkDisplay"></div>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+        <button class="copy-btn" onclick="previewSurvey()" style="border-color: var(--success); color: var(--success);">Preview My Survey →</button>
+      </div>
+    </div>
+
+    <!-- Scoring Guide -->
+    <div class="scoring-guide">
+      <h2>How Scoring Works</h2>
+      <p class="guide-intro">Each respondent rates you 1–5 on eight dimensions. Your <strong style="color:var(--accent)">Orbit Score</strong> is the average across all eight, calculated per response and across all responses. Here's what the numbers mean — inspired by 360° feedback frameworks and brand perception models, but made for real humans.</p>
+
+      <div class="tier">
+        <div class="tier-badge t1">🧊</div>
+        <div class="tier-content">
+          <div class="tier-range t1">1.0 – 1.8 · The Cold Orbit</div>
+          <div class="tier-title">Ghost Mode</div>
+          <div class="tier-desc">People aren't connecting with you — and they might be actively avoiding the conversation. This isn't a verdict, it's a wake-up call. Something about how you're showing up is pushing people to the edges. The good news? You asked, and that already takes guts.</div>
+        </div>
+      </div>
+
+      <div class="tier">
+        <div class="tier-badge t2">🌤️</div>
+        <div class="tier-content">
+          <div class="tier-range t2">1.9 – 2.6 · The Distant Orbit</div>
+          <div class="tier-title">Fading Signal</div>
+          <div class="tier-desc">You're in the room, but you're not quite landing. People sense something's a little off — maybe some walls are up, or the energy isn't matching the intention. There's real potential here, but the signal needs to get stronger and more consistent.</div>
+        </div>
+      </div>
+
+      <div class="tier">
+        <div class="tier-badge t3">⚡</div>
+        <div class="tier-content">
+          <div class="tier-range t3">2.7 – 3.4 · The Middle Orbit</div>
+          <div class="tier-title">Solid but Stuck</div>
+          <div class="tier-desc">You're doing fine — and that's exactly the problem. People see you as decent, reliable, nice enough. But you're not quite breaking through to memorable. This is the zone where most people live, and a few intentional shifts can launch you into something special.</div>
+        </div>
+      </div>
+
+      <div class="tier">
+        <div class="tier-badge t4">🔥</div>
+        <div class="tier-content">
+          <div class="tier-range t4">3.5 – 4.2 · The Inner Orbit</div>
+          <div class="tier-title">Magnetic Energy</div>
+          <div class="tier-desc">Now we're talking. People genuinely like being around you. You're bringing something real — authenticity, warmth, presence — and others feel it. You've got a few edges to smooth out, but make no mistake: you're somebody people want in their corner.</div>
+        </div>
+      </div>
+
+      <div class="tier">
+        <div class="tier-badge t5">🌟</div>
+        <div class="tier-content">
+          <div class="tier-range t5">4.3 – 5.0 · The Core Orbit</div>
+          <div class="tier-title">Gravitational Force</div>
+          <div class="tier-desc">You are the sun in this solar system. People don't just like you — they're drawn to you. You make rooms better, conversations deeper, and people feel more alive after being around you. This is rare. Protect it, keep growing, and don't let it go to your head.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SURVEY SCREEN — what respondents see                   -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="container hidden" id="surveyHero">
+  <div class="hero">
+    <div class="orbit-graphic">
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="orbit-core"></div>
+    </div>
+    <h1>Real Self <span>Orbit</span> Feedback</h1>
+    <p id="heroSubtitle">Help me understand how I show up in your world.</p>
+  </div>
+
+  <div class="safe-space-card">
+    <div class="safe-space-icon">🛡️</div>
+    <h3>Hey — before you start</h3>
+    <p id="safeSpaceP1">I'm doing a little personal growth exercise, and I picked you because I genuinely care about your perspective. This isn't a test, and there are absolutely no wrong answers.</p>
+    <p>Here's what I need from you: <strong>be real</strong>. Don't worry about hurting my feelings or making things weird between us. There will be <strong>no hard feelings, no awkward follow-ups, no angst</strong> — that's a promise. Whether your answers make me smile or make me think twice, that's exactly the point.</p>
+    <p>You can stay totally anonymous if you want. The whole reason I'm doing this is to spot my blind spots, so the more honest you are, the bigger the gift. Thanks for taking a few minutes — it means a lot.</p>
+  </div>
+</div>
+
+<div class="progress-bar hidden" id="progressBar">
+  <div class="progress-track">
+    <div class="progress-fill-container">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 / 10</div>
+  </div>
+</div>
+
+<div class="container hidden" id="surveyContainer">
+
+  <!-- Respondent Info -->
+  <div class="respondent-info">
+    <h3>Quick intro</h3>
+    <div class="info-grid">
+      <label>
+        Your Name (totally optional)
+        <input type="text" id="respName" placeholder="Anonymous is fine!">
+      </label>
+      <label>
+        How do you know me?
+        <select id="respRelationship">
+          <option value="">Pick one…</option>
+          <option value="Close Friend">Close Friend</option>
+          <option value="Colleague">Colleague</option>
+          <option value="Manager/Leader">Manager / Leader</option>
+          <option value="Direct Report">Direct Report</option>
+          <option value="Family Member">Family</option>
+          <option value="Acquaintance">Acquaintance</option>
+          <option value="Mentor/Mentee">Mentor / Mentee</option>
+          <option value="Other">Other</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="question-card" data-q="q1">
+    <div class="question-number">Question 01</div>
+    <div class="question-text" data-template="When you're hanging out or working with {name}, {do} {they} {come} across as genuinely {themselves} — or does it feel like {theyre} putting on a front?"></div>
+    <div class="question-hint">Trust your gut on this one. No overthinking needed.</div>
+    <div class="scale-labels"><span>Feels like a front</span><span>100% genuine</span></div>
+    <div class="scale-options">
+      <label><input type="radio" name="q1" value="1"><div class="scale-btn">1</div></label>
+      <label><input type="radio" name="q1" value="2"><div class="scale-btn">2</div></label>
+      <label><input type="radio" name="q1" value="3"><div class="scale-btn">3</div></label>
+      <label><input type="radio" name="q1" value="4"><div class="scale-btn">4</div></label>
+      <label><input type="radio" name="q1" value="5"><div class="scale-btn">5</div></label>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question-card" data-q="q2">
+    <div class="question-number">Question 02</div>
+    <div class="question-text" data-template="When you're talking to {name}, do you feel like {theyre} really hearing you — or just waiting for {their} turn to speak?"></div>
+    <div class="question-hint">Think about whether you feel genuinely listened to, not just heard.</div>
+    <div class="scale-labels"><span>Waiting to talk</span><span>Truly listens</span></div>
+    <div class="scale-options">
+      <label><input type="radio" name="q2" value="1"><div class="scale-btn">1</div></label>
+      <label><input type="radio" name="q2" value="2"><div class="scale-btn">2</div></label>
+      <label><input type="radio" name="q2" value="3"><div class="scale-btn">3</div></label>
+      <label><input type="radio" name="q2" value="4"><div class="scale-btn">4</div></label>
+      <label><input type="radio" name="q2" value="5"><div class="scale-btn">5</div></label>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question-card" data-q="q3">
+    <div class="question-number">Question 03</div>
+    <div class="question-text" data-template="Be honest — when {name} walks into a room, do people tend to drift away or do they gravitate toward {them}?"></div>
+    <div class="question-hint">Think about the vibe and energy. What's the natural pull?</div>
+    <div class="scale-labels"><span>People drift away</span><span>People gravitate</span></div>
+    <div class="scale-options">
+      <label><input type="radio" name="q3" value="1"><div class="scale-btn">1</div></label>
+      <label><input type="radio" name="q3" value="2"><div class="scale-btn">2</div></label>
+      <label><input type="radio" name="q3" value="3"><div class="scale-btn">3</div></label>
+      <label><input type="radio" name="q3" value="4"><div class="scale-btn">4</div></label>
+      <label><input type="radio" name="q3" value="5"><div class="scale-btn">5</div></label>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question-card" data-q="q4">
+    <div class="question-number">Question 04</div>
+    <div class="question-text" data-template="If you had something tough to tell {name} — something {they} needed to hear but probably wouldn't love — would you feel okay saying it?"></div>
+    <div class="question-hint">This is about whether {they} {make} honesty feel safe or risky.</div>
+    <div class="scale-labels"><span>I'd hold back</span><span>I'd tell them straight</span></div>
+    <div class="scale-options">
+      <label><input type="radio" name="q4" value="1"><div class="scale-btn">1</div></label>
+      <label><input type="radio" name="q4" value="2"><div class="scale-btn">2</div></label>
+      <label><input type="radio" name="q4" value="3"><div class="scale-btn">3</div></label>
+      <label><input type="radio" name="q4" value="4"><div class="scale-btn">4</div></label>
+      <label><input type="radio" name="q4" value="5"><div class="scale-btn">5</div></label>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question-card" data-q="q5">
+    <div class="question-number">Question 05</div>
+    <div class="question-text" data-template="When something new or different gets thrown on the table, is {name} more likely to point out what could go wrong — or get excited about what could go right?"></div>
+    <div class="question-hint">Not about being cautious vs. reckless — more about {their} default energy around change.</div>
+    <div class="scale-labels"><span>Sees the problems</span><span>Sees the possibilities</span></div>
+    <div class="scale-options">
+      <label><input type="radio" name="q5" value="1"><div class="scale-btn">1</div></label>
+      <label><input type="radio" name="q5" value="2"><div class="scale-btn">2</div></label>
+      <label><input type="radio" name="q5" value="3"><div class="scale-btn">3</div></label>
+      <label><input type="radio" name="q5" value="4"><div class="scale-btn">4</div></label>
+      <label><input type="radio" name="q5" value="5"><div class="scale-btn">5</div></label>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question-card" data-q="q6">
+    <div class="question-number">Question 06</div>
+    <div class="question-text" data-template="After spending time with {name}, do you generally walk away feeling better than before — more energized, more seen, more valued?"></div>
+    <div class="question-hint">Think about the feeling you're left with, not any specific thing {they} said.</div>
+    <div class="scale-labels"><span>Not really</span><span>Almost always</span></div>
+    <div class="scale-options">
+      <label><input type="radio" name="q6" value="1"><div class="scale-btn">1</div></label>
+      <label><input type="radio" name="q6" value="2"><div class="scale-btn">2</div></label>
+      <label><input type="radio" name="q6" value="3"><div class="scale-btn">3</div></label>
+      <label><input type="radio" name="q6" value="4"><div class="scale-btn">4</div></label>
+      <label><input type="radio" name="q6" value="5"><div class="scale-btn">5</div></label>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question-card" data-q="q7">
+    <div class="question-number">Question 07</div>
+    <div class="question-text" data-template="Does {name} strike you as someone who's actively trying to grow and get better — or someone who's kind of set in {their} ways?"></div>
+    <div class="question-hint">Could be about work, relationships, personal stuff — anything really.</div>
+    <div class="scale-labels"><span>Pretty set in their ways</span><span>Always growing</span></div>
+    <div class="scale-options">
+      <label><input type="radio" name="q7" value="1"><div class="scale-btn">1</div></label>
+      <label><input type="radio" name="q7" value="2"><div class="scale-btn">2</div></label>
+      <label><input type="radio" name="q7" value="3"><div class="scale-btn">3</div></label>
+      <label><input type="radio" name="q7" value="4"><div class="scale-btn">4</div></label>
+      <label><input type="radio" name="q7" value="5"><div class="scale-btn">5</div></label>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question-card" data-q="q8">
+    <div class="question-number">Question 08</div>
+    <div class="question-text" data-template="Simple one: is {name} somebody you genuinely enjoy being around?"></div>
+    <div class="question-hint">Not "do you tolerate {them}" — do you actually like spending time with {them}?</div>
+    <div class="scale-labels"><span>Meh</span><span>Love it</span></div>
+    <div class="scale-options">
+      <label><input type="radio" name="q8" value="1"><div class="scale-btn">1</div></label>
+      <label><input type="radio" name="q8" value="2"><div class="scale-btn">2</div></label>
+      <label><input type="radio" name="q8" value="3"><div class="scale-btn">3</div></label>
+      <label><input type="radio" name="q8" value="4"><div class="scale-btn">4</div></label>
+      <label><input type="radio" name="q8" value="5"><div class="scale-btn">5</div></label>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question-card" data-q="q9">
+    <div class="question-number">Question 09</div>
+    <div class="question-text" data-template="What's something {name} does naturally — maybe without even realizing it — that you think is a real strength?"></div>
+    <div class="question-hint">Could be big, could be small. Sometimes the best stuff is the stuff we don't see in ourselves.</div>
+    <textarea class="open-answer" name="q9" placeholder="Just say what comes to mind…"></textarea>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question-card" data-q="q10">
+    <div class="question-number">Question 10</div>
+    <div class="question-text" data-template="If you could wave a magic wand and help {name} improve one thing about how {they} {show} up in the world, what would it be?"></div>
+    <div class="question-hint">Don't hold back — this is the kind of honesty that actually helps someone grow.</div>
+    <textarea class="open-answer" name="q10" placeholder="Be real with me…"></textarea>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-section">
+    <button class="submit-btn" id="submitBtn" onclick="submitSurvey()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Send My Feedback
+    </button>
+    <div class="submit-note">Your responses are sent anonymously — the survey owner will never see your email address.<br>Nothing is stored on any server beyond the email delivery.</div>
+  </div>
+</div>
+
+<!-- ═══ THANK YOU ═══ -->
+<div class="container">
+  <div class="thank-you" id="thankYou">
+    <div class="checkmark">✓</div>
+    <h2>You're the best.</h2>
+    <p id="thankYouMsg">Your feedback has been sent. It takes guts to be honest like that — and that honesty won't be wasted.</p>
+  </div>
+
+  <div class="data-panel" id="dataPanel">
+    <h3>📊 Captured Responses</h3>
+    <div id="responsesList"></div>
+    <button class="export-btn" onclick="exportCSV()">Export as CSV</button>
+  </div>
+</div>
+
+<div class="footer">
+  Real Self Orbit Feedback — Built for growth, powered by honesty.
+</div>
+
+<script>
+  // ─── URL Parameter Handling ───
+  const params = new URLSearchParams(window.location.search);
+  const ownerName = params.get('name') || '';
+  const ownerEmail = params.get('email') || '';
+  const ownerPronounKey = params.get('p') || 'they';
+  const WEB3FORMS_KEY = params.get('key') || '';
+  const isSurveyMode = ownerName && ownerEmail;
+
+  // Pronoun map
+  const pronounSets = {
+    he:   { they: 'he',   them: 'him',  their: 'his',  theyre: "he's",  themselves: 'himself',  do: 'does', make: 'makes', show: 'shows', come: 'comes', care: 'cares' },
+    she:  { they: 'she',  them: 'her',  their: 'her',  theyre: "she's", themselves: 'herself',  do: 'does', make: 'makes', show: 'shows', come: 'comes', care: 'cares' },
+    they: { they: 'they', them: 'them', their: 'their', theyre: "they're", themselves: 'themselves', do: 'do', make: 'make', show: 'show', come: 'come', care: 'care' }
+  };
+
+  const p = pronounSets[ownerPronounKey] || pronounSets.they;
+
+  function fillPronouns(text) {
+    return text
+      .replace(/\{name\}/g, ownerName)
+      .replace(/\{they\}/g, p.they)
+      .replace(/\{them\}/g, p.them)
+      .replace(/\{their\}/g, p.their)
+      .replace(/\{theyre\}/g, p.theyre)
+      .replace(/\{themselves\}/g, p.themselves)
+      .replace(/\{do\}/g, p.do)
+      .replace(/\{make\}/g, p.make)
+      .replace(/\{show\}/g, p.show)
+      .replace(/\{come\}/g, p.come)
+      .replace(/\{care\}/g, p.care);
+  }
+
+  if (isSurveyMode) {
+    document.getElementById('setupScreen').classList.add('hidden');
+    document.getElementById('surveyHero').classList.remove('hidden');
+    document.getElementById('surveyContainer').classList.remove('hidden');
+
+    document.getElementById('heroSubtitle').textContent =
+      `${ownerName} wants to understand how ${p.they} ${p.show} up in your world. A few minutes of your honesty is a real gift.`;
+
+    document.getElementById('safeSpaceP1').innerHTML =
+      `<span class="owner-name-highlight">${ownerName}</span> is doing a personal growth exercise, and ${p.they} picked <em>you</em> because ${p.they} genuinely ${p.care} about your perspective. This isn't a test, and there are absolutely no wrong answers.`;
+
+    // Fill pronoun tokens in all templates and hints
+    document.querySelectorAll('[data-template]').forEach(el => {
+      el.textContent = fillPronouns(el.dataset.template);
+    });
+
+    document.querySelectorAll('.question-hint').forEach(el => {
+      el.textContent = fillPronouns(el.textContent);
+    });
+  }
+
+  // ─── Setup: Generate Survey Link ───
+  function generateSurvey() {
+    const name = document.getElementById('ownerName').value.trim();
+    const email = document.getElementById('ownerEmail').value.trim();
+    const pronouns = document.getElementById('ownerPronouns').value;
+    const key = document.getElementById('ownerKey').value.trim();
+
+    if (!name) { alert('Please enter your first name.'); return; }
+    if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+
+    const base = window.location.href.split('?')[0];
+    let link = `${base}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&p=${pronouns}`;
+    if (key) link += `&key=${encodeURIComponent(key)}`;
+
+    document.getElementById('linkDisplay').textContent = link;
+    document.getElementById('linkSection').style.display = 'block';
+    document.getElementById('linkSection').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function previewSurvey() {
+    const name = document.getElementById('ownerName').value.trim();
+    const email = document.getElementById('ownerEmail').value.trim();
+    const pronouns = document.getElementById('ownerPronouns').value;
+    const key = document.getElementById('ownerKey').value.trim();
+    if (!name || !email) { alert('Please generate your survey first.'); return; }
+
+    let qs = `?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&p=${pronouns}`;
+    if (key) qs += `&key=${encodeURIComponent(key)}`;
+    window.location.search = qs;
+  }
+
+  function copyLink() {
+    const link = document.getElementById('linkDisplay').textContent;
+    navigator.clipboard.writeText(link).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => { btn.textContent = 'Copy Link'; }, 2000);
+    });
+  }
+
+  // ─── Progress Tracking ───
+  const totalQuestions = 10;
+  let answered = new Set();
+
+  document.querySelectorAll('input[type="radio"]').forEach(input => {
+    input.addEventListener('change', (e) => {
+      answered.add(e.target.name);
+      e.target.closest('.question-card').classList.add('answered');
+      updateProgress();
+    });
+  });
+
+  document.querySelectorAll('.open-answer').forEach(ta => {
+    ta.addEventListener('input', (e) => {
+      if (e.target.value.trim().length > 0) {
+        answered.add(e.target.name);
+        e.target.closest('.question-card').classList.add('answered');
+      } else {
+        answered.delete(e.target.name);
+        e.target.closest('.question-card').classList.remove('answered');
+      }
+      updateProgress();
+    });
+  });
+
+  function updateProgress() {
+    const pct = (answered.size / totalQuestions) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = answered.size + ' / ' + totalQuestions;
+    document.getElementById('progressBar').classList.remove('hidden');
+  }
+
+  // ─── Submit via Email ───
+  const questionLabels = [
+    'Authenticity', 'Listening', 'Room Presence', 'Open to Feedback',
+    'Change Response', 'Positive Impact', 'Growth Mindset', 'Likeability',
+    'Hidden Strength', 'Area to Grow'
+  ];
+
+  async function submitSurvey() {
+    const respName = document.getElementById('respName').value || 'Anonymous';
+    const respRelationship = document.getElementById('respRelationship').value || 'Not specified';
+
+    let body = `REAL SELF ORBIT FEEDBACK\n`;
+    body += `For: ${ownerName}\n`;
+    body += `From: ${respName} (${respRelationship})\n`;
+    body += `Date: ${new Date().toLocaleDateString()}\n`;
+    body += `────────────────────────────────────────\n\n`;
+
+    body += `SCORES (out of 5)\n\n`;
+
+    let totalScore = 0;
+    let answeredCount = 0;
+
+    for (let i = 1; i <= 8; i++) {
+      const sel = document.querySelector(`input[name="q${i}"]:checked`);
+      const val = sel ? sel.value : 'No answer';
+      const dots = sel ? ('★'.repeat(parseInt(sel.value)) + '☆'.repeat(5 - parseInt(sel.value))) : '☆☆☆☆☆';
+      body += `  ${questionLabels[i-1]}: ${dots}  (${val}/5)\n`;
+      if (sel) { totalScore += parseInt(sel.value); answeredCount++; }
+    }
+
+    const avg = answeredCount > 0 ? (totalScore / answeredCount) : 0;
+    const tier = getOrbitTier(avg);
+
+    body += `\n────────────────────────────────────────\n\n`;
+    body += `ORBIT SCORE: ${avg.toFixed(1)} / 5.0\n`;
+    body += `TIER: ${tier.emoji} ${tier.name} — "${tier.title}"\n`;
+    body += `${tier.summary}\n`;
+
+    body += `\n────────────────────────────────────────\n\n`;
+
+    const q9 = document.querySelector('textarea[name="q9"]').value || 'No answer';
+    const q10 = document.querySelector('textarea[name="q10"]').value || 'No answer';
+
+    body += `HIDDEN STRENGTH:\n${q9}\n\n`;
+    body += `AREA TO GROW:\n${q10}\n\n`;
+    body += `────────────────────────────────────────\n`;
+    body += `Sent via Real Self Orbit Feedback`;
+
+    // Store locally too
+    const data = {
+      timestamp: new Date().toISOString(),
+      name: respName,
+      relationship: respRelationship,
+    };
+    for (let i = 1; i <= 8; i++) {
+      const sel = document.querySelector(`input[name="q${i}"]:checked`);
+      data[`q${i}`] = sel ? sel.value : '';
+    }
+    data.q9 = document.querySelector('textarea[name="q9"]').value;
+    data.q10 = document.querySelector('textarea[name="q10"]').value;
+
+    let responses = JSON.parse(localStorage.getItem('orbitResponses') || '[]');
+    responses.push(data);
+    localStorage.setItem('orbitResponses', JSON.stringify(responses));
+
+    // ─── Send via Web3Forms (anonymous, no respondent email exposed) ───
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    // Build the Web3Forms payload
+    const formData = {
+      access_key: WEB3FORMS_KEY,
+      subject: `Real Self Orbit Feedback for ${ownerName} — from ${respName}`,
+      from_name: 'Real Self Orbit',
+      message: body
+    };
+
+    // Try Web3Forms first
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const result = await res.json();
+
+      if (result.success) {
+        showThankYou();
+      } else {
+        // Fallback to mailto if API fails
+        fallbackMailto(body, respName);
+      }
+    } catch (err) {
+      // Network error — fallback to mailto
+      fallbackMailto(body, respName);
+    }
+  }
+
+  function fallbackMailto(body, respName) {
+    const subject = encodeURIComponent(`Real Self Orbit Feedback for ${ownerName} — from ${respName}`);
+    const mailBody = encodeURIComponent(body);
+    window.location.href = `mailto:${ownerEmail}?subject=${subject}&body=${mailBody}`;
+    setTimeout(showThankYou, 500);
+  }
+
+  function showThankYou() {
+    document.getElementById('surveyContainer').classList.add('hidden');
+    document.getElementById('surveyHero').classList.add('hidden');
+    document.getElementById('progressBar').classList.add('hidden');
+    document.getElementById('thankYou').style.display = 'block';
+    document.getElementById('thankYouMsg').textContent =
+      `Your feedback for ${ownerName} has been sent. It takes guts to be honest like that — and that honesty won't be wasted.`;
+    renderDataPanel();
+  }
+
+  // ─── Orbit Scoring System ───
+  function getOrbitTier(avg) {
+    if (avg <= 1.8) return {
+      emoji: '🧊', name: 'The Cold Orbit', title: 'Ghost Mode', class: 't1',
+      summary: 'People aren\'t connecting — something about how you show up is creating distance. But hey, you asked. That takes guts.'
+    };
+    if (avg <= 2.6) return {
+      emoji: '🌤️', name: 'The Distant Orbit', title: 'Fading Signal', class: 't2',
+      summary: 'You\'re in the room but not quite landing. The intention is there — the signal just needs to get stronger and more consistent.'
+    };
+    if (avg <= 3.4) return {
+      emoji: '⚡', name: 'The Middle Orbit', title: 'Solid but Stuck', class: 't3',
+      summary: 'You\'re doing fine — and that\'s exactly the problem. You\'re close to something great. A few intentional shifts could change everything.'
+    };
+    if (avg <= 4.2) return {
+      emoji: '🔥', name: 'The Inner Orbit', title: 'Magnetic Energy', class: 't4',
+      summary: 'People genuinely like being around you. You bring something real — authenticity, warmth, presence. Keep sharpening those edges.'
+    };
+    return {
+      emoji: '🌟', name: 'The Core Orbit', title: 'Gravitational Force', class: 't5',
+      summary: 'You are the sun. People are drawn to you. You make rooms better and people feel more alive around you. This is rare — protect it.'
+    };
+  }
+
+  // ─── Data Panel ───
+  function renderDataPanel() {
+    const responses = JSON.parse(localStorage.getItem('orbitResponses') || '[]');
+    if (responses.length === 0) return;
+
+    const panel = document.getElementById('dataPanel');
+    panel.style.display = 'block';
+
+    // Calculate overall average across ALL responses
+    let grandTotal = 0;
+    let grandCount = 0;
+
+    responses.forEach(r => {
+      for (let i = 1; i <= 8; i++) {
+        if (r[`q${i}`] && r[`q${i}`] !== '') {
+          grandTotal += parseInt(r[`q${i}`]);
+          grandCount++;
+        }
+      }
+    });
+
+    const overallAvg = grandCount > 0 ? (grandTotal / grandCount) : 0;
+    const overallTier = getOrbitTier(overallAvg);
+
+    let html = '';
+
+    // Overall scorecard (only show if more than 1 response)
+    if (responses.length >= 1) {
+      html += `<div class="scorecard">
+        <div class="scorecard-number">${overallAvg.toFixed(1)}</div>
+        <div class="scorecard-label">Overall Orbit Score · ${responses.length} response${responses.length > 1 ? 's' : ''}</div>
+        <div class="scorecard-tier ${overallTier.class}">${overallTier.emoji} ${overallTier.title}</div>
+        <div class="scorecard-blurb">${overallTier.summary}</div>
+      </div>`;
+    }
+
+    // Individual responses
+    responses.forEach((r) => {
+      // Per-response score
+      let rTotal = 0; let rCount = 0;
+      for (let i = 1; i <= 8; i++) {
+        if (r[`q${i}`] && r[`q${i}`] !== '') { rTotal += parseInt(r[`q${i}`]); rCount++; }
+      }
+      const rAvg = rCount > 0 ? (rTotal / rCount) : 0;
+      const rTier = getOrbitTier(rAvg);
+
+      html += `<div style="margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--border);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+          <div>
+            <strong style="color: var(--accent);">${r.name}</strong>
+            <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 8px;">${r.relationship} · ${new Date(r.timestamp).toLocaleDateString()}</span>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-family:'DM Serif Display',serif; font-size: 1.3rem; color: var(--accent);">${rAvg.toFixed(1)}</span>
+            <span style="font-size: 0.72rem; color: var(--text-dim); display: block;">${rTier.emoji} ${rTier.title}</span>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Dimension</th><th>Score</th></tr></thead>
+          <tbody>`;
+      for (let i = 1; i <= 8; i++) {
+        const val = r[`q${i}`] || '—';
+        const bar = val !== '—' ? `<div style="display:inline-block;width:${val * 20}%;height:6px;background:var(--accent);border-radius:3px;margin-left:8px;vertical-align:middle;"></div>` : '';
+        html += `<tr><td>${questionLabels[i-1]}</td><td>${val} / 5 ${bar}</td></tr>`;
+      }
+      html += `<tr><td>${questionLabels[8]}</td><td style="font-style:italic;color:var(--text-muted)">${r.q9 || '—'}</td></tr>`;
+      html += `<tr><td>${questionLabels[9]}</td><td style="font-style:italic;color:var(--text-muted)">${r.q10 || '—'}</td></tr>`;
+      html += `</tbody></table></div>`;
+    });
+
+    document.getElementById('responsesList').innerHTML = html;
+  }
+
+  function exportCSV() {
+    const responses = JSON.parse(localStorage.getItem('orbitResponses') || '[]');
+    if (responses.length === 0) return;
+
+    const headers = ['Timestamp', 'Name', 'Relationship',
+      'Q1_Authenticity', 'Q2_Listening', 'Q3_RoomPresence',
+      'Q4_OpenToFeedback', 'Q5_ChangeResponse', 'Q6_PositiveImpact',
+      'Q7_GrowthMindset', 'Q8_Likeability',
+      'Q9_HiddenStrength', 'Q10_AreaToGrow'];
+
+    let csv = headers.join(',') + '\n';
+    responses.forEach(r => {
+      const row = [
+        r.timestamp, `"${r.name}"`, `"${r.relationship}"`,
+        r.q1, r.q2, r.q3, r.q4, r.q5, r.q6, r.q7, r.q8,
+        `"${(r.q9 || '').replace(/"/g, '""')}"`,
+        `"${(r.q10 || '').replace(/"/g, '""')}"`
+      ];
+      csv += row.join(',') + '\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'real-self-orbit-feedback.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  renderDataPanel();
+</script>
+</body>
+</html>
