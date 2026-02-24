@@ -855,11 +855,7 @@
         <span class="helper">Responses get emailed here. Your email is never shown to respondents.</span>
       </div>
 
-      <div class="setup-field">
-        <label for="ownerKey">Web3Forms Access Key (free)</label>
-        <input type="text" id="ownerKey" placeholder="e.g. a1b2c3d4-e5f6-7890-abcd-ef1234567890">
-        <span class="helper">This makes submissions automatic and anonymous. Get your free key in 30 seconds at <a href="https://web3forms.com" target="_blank" style="color: var(--accent); text-decoration: underline;">web3forms.com</a> — just enter the same email above, verify it, and paste the key here. Free for 250 submissions/month.</span>
-      </div>
+      <input type="hidden" id="ownerKey" value="">
 
       <button class="setup-btn" onclick="generateSurvey()">Generate My Survey →</button>
     </div>
@@ -1525,3 +1521,4 @@
 </script>
 </body>
 </html>
+
